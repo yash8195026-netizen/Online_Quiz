@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Take Quiz</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+    <!-- Navbar -->     
+   <nav class="navbar">
+    <div class="logo">Online Quiz</div>
+    <div class="nav-right">
+        <div class="topdiv">
+            <a class="topmenu" th:href="@{/home}">Home</a>
+            <a class="topmenu" th:href="@{/quiz}">Quiz</a>
+            <a class="topmenu" th:href="@{/quizList}" sec:authorize="hasRole('ADMIN')">Manage Quiz </a>
+            <a class="topmenu" th:href="@{/profile}" class="topmenu username">Welcome,<span th:text="${#authentication.name}"></span></a>
+        </div>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="logout-btn"> Logout </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container">
+        <div class="quiz-card">
+            <h2>📝 Quiz Challenge</h2>
+            <p class="quiz-subtitle">
+                Select the correct answer for each question.
+            </p>
+
+            <div class="quiz-timer">
+                Time Left:<span id="timer"></span>
+            </div>
+            <form id="quizForm" th:action="@{/submit}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div th:if="${#lists.isEmpty(questions)}" class="empty-message">
+                    No quiz questions available.
+                </div>
+
+                <div class="question-box" th:each="q, stat : ${questions}">
+
+                    <div class="question-text" th:text="${q.questionText}"></div>
+                    <div class="option-box">
+
+                    <label>
+                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option1}" required>
+                    <span th:text="${q.option1}"></span>
+                    </label>
+
+                    <label>
+                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option2}">
+                    <span th:text="${q.option2}"></span>
+                    </label>
+
+                    <label>
+                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option3}">
+                    <span th:text="${q.option3}"></span>
+                    </label>
+
+                    <label>
+                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option4}">
+                    <span th:text="${q.option4}"></span>
+                    </label>
+
+                </div>
+                </div>
+                <button type="submit" class="submit-btn" th:if="${!#lists.isEmpty(questions)}">
+                    Submit Quiz
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+    <script th:inline="javascript">
+        let timeLeft = /*[[${quizTime}]]*/ 600;
+        function startTimer(){
+
+        let timer = setInterval(function(){
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+
+        document.getElementById("timer").innerText =minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+        if(timeLeft <= 0){
+            clearInterval(timer);
+            alert("Time is up!");
+            document.getElementById("quizForm").submit();
+            return;
+        }
+                timeLeft--;
+            },1000);
+        }
+        startTimer();
+    </script>
+</html>

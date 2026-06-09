@@ -1,0 +1,143 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f6fa;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.navbar{
+ background: linear-gradient(90deg, #5342e8, #5bc2e7);
+  padding: 14px 22px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  top: 0;
+  left: 0;
+  position:fixed;  
+  width: 100%;
+
+}
+
+.logo{
+    font-size:34px;
+    font-weight:bold;
+}
+
+.container{
+    width:100%;
+    max-width:450px;
+    background:#fff;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+    text-align:center;
+}
+
+.container h2{
+    font-size:32px;
+    margin-bottom:20px;
+    color:#1e1e2f;
+}
+
+.container input{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+}
+
+.container input:focus{
+    outline:none;
+    border-color:#385ced;
+}
+
+.container button{
+    width:100%;
+    background:linear-gradient(90deg,#385ced,#5bc2e7);
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.container button:hover{
+    opacity:.9;
+}
+
+.role-group{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:15px 0;
+}
+
+.error{
+    color:#ef4444;
+    margin-top:10px;
+}
+
+.success{
+    color:#22c55e;
+    margin-top:10px;
+}
+
+.otp-timer{
+    background:#ef4444;
+    color:white;
+    padding:10px;
+    border-radius:8px;
+    text-align:center;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+/* ================= H2 STYLE ================= */
+h2 {
+  font-size: 42px;
+  font-weight: bold;
+  color: #1e1e2f;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 1px;
+  transition: 0.3s ease;
+}
+
+/* Underline Effect */
+h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 70%;
+  height: 4px;
+  background: linear-gradient(90deg, #5342e8, #5bc2e7);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Hover Effect */
+h2:hover {
+  color: #5342e8;
+  transform: translateX(5px);
+}
+
+h2:hover::after {
+  width: 100%;
+}

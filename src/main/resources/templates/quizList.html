@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Quiz List</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+  <!-- Navbar -->     
+   <nav class="navbar">
+    <div class="logo">Online Quiz</div>
+    <div class="nav-right">
+        <div class="topdiv">
+            <a class="topmenu" th:href="@{/home}">Home</a>
+            <a class="topmenu" th:href="@{/quiz}">Quiz</a>
+            <a class="topmenu" th:href="@{/quizList}" sec:authorize="hasRole('ADMIN')">Manage Quiz </a>
+            <a class="topmenu" th:href="@{/profile}" class="topmenu username">Welcome,<span th:text="${#authentication.name}"></span></a>
+        </div>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="logout-btn"> Logout </button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="page-header">
+            <h2>Quiz Questions</h2>
+            <a th:href="@{/addQuiz}" class="add-btn"> + Add New Quiz </a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Question</th>
+                    <th>Answer</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="q : ${questions}">
+                    <td th:text="${q.id}"></td>
+                    <td th:text="${q.questionText}"></td>
+                    <td th:text="${q.correctAnswer}"></td>
+                    <td class="actions">
+                        <a class="edit-btn" th:href="@{/editQuiz/{id}(id=${q.id})}"> Edit </a>
+                        <form th:action="@{/deleteQuiz/{id}(id=${q.id})}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="delete-btn" onclick="return confirm('Delete this quiz?')">
+                                Delete </button>
+                        </form>
+                    </td>
+                </tr>
+
+                <!-- Show when table is empty -->
+                <tr th:if="${#lists.isEmpty(questions)}">
+                    <td colspan="4" class="empty-message"> No quiz questions found. </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+    <!-- Navbar -->     
+   <nav class="navbar">
+        <div class="logo">Online Quiz</div>
+        <div class="nav-right">
+        <div class="topdiv">
+            <a class="topmenu" th:href="@{/home}">Home</a>
+            <a class="topmenu" th:href="@{/quiz}">Quiz</a>
+            <a class="topmenu" th:href="@{/quizList}" sec:authorize="hasRole('ADMIN')">Manage Quiz </a>
+            <a th:href="@{/profile}" class="topmenu username">Welcome,<span th:text="${#authentication.name}"></span></a>
+        </div>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="logout-btn"> Logout </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container">
+        <div class="form-container">
+        <h2>Welcome to Online Quiz</h2>
+        <p class="dashboard-subtitle"> Test your knowledge and challenge yourself with exciting quiz questions. </p>
+        <div class="card-grid">
+             <a th:href="@{/quiz}" class="dashboard-card">
+                <h3>📝Start Quiz</h3> 
+                <p>Begin the quiz and test your knowledge.</p></a>
+        </div>
+        </div>
+    </div>
+</body>
+</html>
