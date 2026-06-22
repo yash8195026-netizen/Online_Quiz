@@ -14,6 +14,7 @@
 <groupId>quiz_application</groupId>
 <artifactId>quiz</artifactId>
 <version>0.0.1-SNAPSHOT</version>
+<packaging>jar</packaging>
 <name>quiz</name>
 <description>Online Quiz Application</description>
 
