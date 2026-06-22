@@ -1,199 +1,330 @@
 package quiz_application.quiz.controller;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import quiz_application.quiz.model.Question;
+import quiz_application.quiz.model.User;
 import quiz_application.quiz.service.QuestionsService;
+import quiz_application.quiz.service.QuizResultService;
+import quiz_application.quiz.service.QuizUserDetailsService;
 
 @Controller
 public class QuizController {
 
-private final QuestionsService questionsService;
+    private final QuestionsService questionsService;
+    private final QuizResultService quizResultService;
+    private final QuizUserDetailsService userService;
 
-public QuizController(QuestionsService questionsService) {
-    this.questionsService = questionsService;
-}
 
-@GetMapping("/home")
-public String homePage() {
-    return "home";
-}
+    public QuizController(
+            QuestionsService questionsService,
+            QuizResultService quizResultService,
+            QuizUserDetailsService userService) {
 
-@GetMapping("/quizList")
-public String quizList(Model model) {
-    model.addAttribute("questions", questionsService.loadQuizzes());
-    return "quizList";
-}
+        this.questionsService = questionsService;
+        this.quizResultService = quizResultService;
+        this.userService = userService;
+        }
 
-/* =========================
-   ADD QUIZ
-   ========================= */
+    private List<Question> getQuestions(String category) {
+        return questionsService.loadQuizzesByCategory(category);
+        }
 
-@GetMapping("/addQuiz")
-public String addQuizPage(Model model) {
-    model.addAttribute("question", new Question());
-    return "addQuiz";
-}
+    /* =========================
+       QUIZ PAGE
+       ========================= */
 
-@PostMapping("/addQuiz")
-public String addQuiz(
-        @ModelAttribute Question question,
-        @RequestParam String option1,
-        @RequestParam String option2,
-        @RequestParam String option3,
-        @RequestParam String option4) {
+    @GetMapping("/quiz/{category}")
+    public String quizByCategory(
+            @PathVariable String category,
+            Model model,
+            HttpSession session,
+            RedirectAttributes redirectAttributes,
+            HttpServletResponse response,
+            Principal principal) {
 
-    question.setOption1(option1);
-    question.setOption2(option2);
-    question.setOption3(option3);
-    question.setOption4(option4);
+        response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
 
-    questionsService.addQuiz(question);
-    return "redirect:/quizList";
-}
+        response.setHeader("Pragma","no-cache");
 
-/* =========================
-   EDIT QUIZ
-   ========================= */
+        response.setDateHeader("Expires",0);
 
-@GetMapping("/editQuiz/{id}")
-public String editQuizPage(@PathVariable Long id, Model model) {
+        category = category.trim().toLowerCase();
 
-    Question question = questionsService.findById(id);
-    model.addAttribute("question", question);
-    return "editQuiz";
-}
+        if (principal == null) {
+            return "redirect:/login";
+        }
 
-@PutMapping("/editQuiz")
-public String editQuiz(
-        @ModelAttribute Question question,
-        @RequestParam String option1,
-        @RequestParam String option2,
-        @RequestParam String option3,
-        @RequestParam String option4) {
+        User user = userService.findByUsername(principal.getName());
 
-    question.setOption1(option1);
-    question.setOption2(option2);
-    question.setOption3(option3);
-    question.setOption4(option4);
+        if (!user.getRole().equalsIgnoreCase("ADMIN")) {
 
-    questionsService.editQuiz(question);
-    return "redirect:/quizList";
-}
+            if (!quizResultService.canAttemptQuiz(
+                    user.getId(),
+                    category)) {
 
-/* =========================
-   DELETE QUIZ
-   ========================= */
+                LocalDateTime nextAttempt =
+                        quizResultService.getNextAttemptTime(
+                                user.getId(),category);
 
-@DeleteMapping("/deleteQuiz/{id}")
-public String deleteQuiz(@PathVariable Long id) {
-    questionsService.deleteQuiz(id);
-    return "redirect:/quizList";
-}
+                DateTimeFormatter formatter =
+                        DateTimeFormatter.ofPattern(
+                                "dd MMM yyyy hh:mm a");
 
-/* =========================
-   TAKE QUIZ
-   ========================= */
+                redirectAttributes.addFlashAttribute(
+                        "error","You can reattempt "
+                                + category.toUpperCase()
+                                + " quiz after "+ nextAttempt.format(formatter));
 
-@GetMapping("/quiz")
-public String quizPage(Model model, HttpSession session) {
+                return "redirect:/home";
+            }
+        }
 
-    Long quizStartTime =(Long) session.getAttribute("quizStartTime");
+        String selectedCategory =
+                (String) session.getAttribute(
+                        "selectedCategory");
 
-    if (quizStartTime == null) {
-        quizStartTime = System.currentTimeMillis();
-        session.setAttribute("quizStartTime", quizStartTime);
+        if (selectedCategory != null
+                && !selectedCategory.equalsIgnoreCase(category)) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error","You already have an active "
+                    + selectedCategory.toUpperCase()+ " quiz. Finish it first.");
+
+            return "redirect:/home";
+        }
+
+        if (selectedCategory == null) {
+            session.setAttribute(
+                    "selectedCategory",category);
+        }
+
+        if (session.getAttribute(
+                "quizStartTime") == null) {
+
+            session.setAttribute(
+                    "quizStartTime",System.currentTimeMillis());
+        }
+
+        List<Question> questions = getQuestions(category);
+
+        if (questions.isEmpty()) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error","No questions available for "+ category.toUpperCase());
+
+            return "redirect:/home";
+        }
+
+        Long quizDuration =(Long) session.getAttribute("quizDuration");
+
+        if (quizDuration == null) {
+
+            quizDuration =questions.size() * 45L;
+
+            session.setAttribute("quizDuration",quizDuration);
+        }
+
+        Long startTime =
+                (Long) session.getAttribute(
+                        "quizStartTime");
+
+        long elapsed =
+                (System.currentTimeMillis()
+                        - startTime) / 1000;
+
+        long remainingTime =
+                Math.max(
+                        0,
+                        quizDuration - elapsed);
+
+        model.addAttribute("questions",questions);
+
+        model.addAttribute("category",category);
+
+        model.addAttribute("quizTime",remainingTime);
+
+        return "quiz";
     }
-    long elapsed =(System.currentTimeMillis() - quizStartTime) / 1000;
 
-    if (elapsed >= 600) {
+    /* =========================
+       SUBMIT QUIZ
+       ========================= */
 
-        session.removeAttribute("quizStartTime");
+    @PostMapping("/submit")
+    public String submitAnswer(
+            @RequestParam Map<String, String> answers,
+            Model model,
+            HttpSession session,
+            Principal principal) {
+
+        Long quizStartTime = (Long) session.getAttribute("quizStartTime");
+
+        Long quizDuration = (Long) session.getAttribute("quizDuration");
+
+        boolean timeExpired = false;
+
+        // ================= TIME CHECK =================
+        if (quizStartTime != null && quizDuration != null) {
+
+                long elapsed = (System.currentTimeMillis() - quizStartTime) / 1000;
+
+                if (elapsed >= quizDuration) {
+                        timeExpired = true;
+                }
+        }
+
+        // ================= CATEGORY CHECK =================
+        String category = (String) session.getAttribute("selectedCategory");
+
+        if (category == null) {
+
+                model.addAttribute("error","Session expired. Please start the quiz again.");
+
+                return "result";
+        }
+
+        // ================= FETCH QUESTIONS =================
+        List<Question> questions = getQuestions(category);
+
+        int score = 0;
+
+        // ================= CALCULATE SCORE =================
+        for (Question q : questions) {
+
+        String selectedAnswer = answers.get("question_" + q.getId());
+
+                if (selectedAnswer != null
+                        && selectedAnswer.equals(q.getCorrectAnswer())) {
+                        score++;
+                }
+        }
+
+        int totalQuestions = questions.size();
+
+        double percentage =
+                totalQuestions == 0
+                        ? 0
+                        : ((double) score / totalQuestions) * 100;
+
+        // ================= SAVE RESULT =================
+        if (principal != null) {
+
+        User user = userService.findByUsername(principal.getName());
+
+        quizResultService.saveResult(
+                user.getId(),
+                category,
+                score,
+                totalQuestions,
+                percentage);
+        }
+
+        // ================= REVIEW DATA =================
+        session.setAttribute("reviewQuestions", questions);
+        session.setAttribute("reviewAnswers", answers);
+
+        // ================= CLEAN SESSION =================
+        clearQuizSession(session);
+
+        // ================= MODEL ATTRIBUTES =================
+        model.addAttribute("score", score);
+        model.addAttribute("totalQuestions", totalQuestions);
+        model.addAttribute("percentage", percentage);
+
+        if (timeExpired) {
+                model.addAttribute("error","Time expired. Quiz auto-submitted.");
+        }
+
+        return "result";
+     }
+
+    /* =========================
+       REVIEW PAGE
+       ========================= */
+    @SuppressWarnings("unchecked")
+    @GetMapping("/review")
+    public String reviewQuiz(
+            HttpSession session,
+            Model model) {
+
+        List<Question> questions = (List<Question>) session.getAttribute("reviewQuestions");
+
+        Map<String, String> answers = (Map<String, String>) session.getAttribute("reviewAnswers");
+
+        if (questions == null || answers == null) {
+            return "redirect:/home";
+        }
+
+        model.addAttribute("questions",questions);
+
+        model.addAttribute("answers",answers);
+
+        session.removeAttribute("reviewQuestions");
+        session.removeAttribute("reviewAnswers");
+
+        return "quizReview";
+    }
+
+    /* =========================
+       HISTORY PAGE
+       ========================= */
+
+    @GetMapping("/history")
+    public String historyPage(
+            Principal principal,
+            Model model) {
+
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        User user =userService.findByUsername(principal.getName());
+
+        model.addAttribute("history",quizResultService.getHistory(user.getId()));
+
+        return "history";
+    }
+
+    /* =========================
+       RESULT PAGE
+       ========================= */
+
+    @GetMapping("/results")
+    public String resultPage(
+            Model model) {
 
         model.addAttribute("score", 0);
-        model.addAttribute("totalQuestions",questionsService.loadQuizzes().size());
+        model.addAttribute("totalQuestions", 0);
         model.addAttribute("percentage", 0);
-        model.addAttribute("error", "Quiz time expired");
 
         return "result";
     }
 
-    long remaining = Math.max(600 - elapsed, 0);
+    /* =========================
+       UTILITIES
+       ========================= */
 
-    model.addAttribute("quizTime", remaining);
-    model.addAttribute("questions",questionsService.loadQuizzes());
+    private void clearQuizSession(
+            HttpSession session) {
 
-    return "quiz";
-}
-
-/* =========================
-   SUBMIT QUIZ
-   ========================= */
-
-@PostMapping("/submit")
-public String submitAnswer(
-        @RequestParam Map<String, String> answers,
-        Model model,
-        HttpSession session) {
-
-    Long quizStartTime =(Long) session.getAttribute("quizStartTime");
-
-    if (quizStartTime != null) {
-
-        long elapsed =(System.currentTimeMillis() - quizStartTime) / 1000;
-
-        if (elapsed >= 600) {
-
-            session.removeAttribute("quizStartTime");
-
-            model.addAttribute("score", 0);
-            model.addAttribute("totalQuestions",questionsService.loadQuizzes().size());
-            model.addAttribute("percentage", 0);
-            model.addAttribute("error", "Quiz time expired");
-            return "result";
-        }
+        session.removeAttribute("quizStartTime");
+        session.removeAttribute("quizDuration");
+        session.removeAttribute("selectedCategory");
     }
-
-    List<Question> questions = questionsService.loadQuizzes();
-    int score = 0;
-
-    for (Question q : questions) {
-        String selectedAnswer = answers.get("question_" + q.getId());
-
-        if (selectedAnswer != null &&
-                selectedAnswer.equals(q.getCorrectAnswer())) {
-            score++;
-        }
-    }
-    int totalQuestions = questions.size();
-    double percentage = totalQuestions == 0? 0: ((double) score / totalQuestions) * 100;
-
-    model.addAttribute("score", score);
-    model.addAttribute("totalQuestions", totalQuestions);
-    model.addAttribute("percentage", percentage);
-    session.removeAttribute("quizStartTime");
-    return "result";
-}
-
-/* =========================
-   RESULTS PAGE
-   ========================= */
-
-@GetMapping("/results")
-public String resultPage(Model model) {
-    model.addAttribute("score", 0);
-    model.addAttribute("totalQuestions", 0);
-    model.addAttribute("percentage", 0);
-    return "result";
-}
 }

@@ -1,46 +1,92 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Login</title>
-        <link rel="stylesheet" type="text/css" th:href="@{/css/auth.css}" />
-    </head>
-    <body>
-                <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">Online Quiz </div>
-    </nav>
 
-        <div class="container">
-        <h2>Login</h2>
-        <form th:action="@{/login}" method="post" class="form-group">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-              <!-- Username -->
-            <input type="text" name="username" placeholder="Username or Email" required>
-            <!-- Password -->
-            <input type="password" name="password" placeholder="Password" required>
-            <!-- Submit Button -->
-            <button type="submit">Login</button>
-        </form>
+<head>
+    <title>Login</title>
 
-          <!-- Error Message -->
-        <div th:if="${param.error}" class="error">
-            Invalid username or password.
-        </div>
-        <!-- Success Message -->
-        <div th:if="${param.success}" class="success">
-            Registration successful. Please login.
-        </div>
+<!-- Authentication Page Styles -->
+<link rel="stylesheet" type="text/css" th:href="@{/css/auth.css}" />
 
-        <div th:if="${param.resetSuccess}" class="success">
-            Password reset successful.
-        </div>
-        <div th:if="${param.logout}" class="success">
-            Logged out successfully.
-        </div>
-        <br>
-        <!-- Link to Login Page -->
-        <p>Don't have an account? <a th:href="@{/register}">Register here</a></p><br>
-        <p><a th:href="@{/forgotPassword}">Forgot Password?</a></p>
+</head>
 
-        </div>
-    </body>
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+    <div class="logo">Online Quiz</div>
+</nav>
+
+<!-- ================= LOGIN CONTAINER ================= -->
+<div class="container">
+
+    <h2>Login</h2>
+
+    <!-- ================= LOGIN FORM ================= -->
+    <form th:action="@{/login}" method="post" class="form-group">
+
+        <!-- CSRF Token -->
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+        <!-- Username / Email -->
+        <input type="text"
+               name="username"
+               placeholder="Username or Email"
+               required>
+
+        <!-- Password -->
+        <input type="password"
+               name="password"
+               placeholder="Password"
+               required>
+
+        <!-- Submit Button -->
+        <button type="submit">Login</button>
+
+    </form>
+
+    <!-- ================= MESSAGES ================= -->
+
+    <div th:if="${param.error}" class="error">
+        Invalid username or password.
+    </div>
+
+    <div th:if="${param.success}" class="success">
+        Registration successful. Please login.
+    </div>
+
+    <div th:if="${param.resetSuccess}" class="success">
+        Password reset successful.
+    </div>
+
+    <div th:if="${param.logout}" class="success">
+        Logged out successfully.
+    </div>
+
+    <div th:if="${param.usernameChanged}" class="success">
+        Username updated successfully. Please login again.
+    </div>
+
+    <div th:if="${param.passwordChanged}" class="success">
+        Password changed successfully. Please login again.
+    </div>
+
+    <!-- ================= LINKS ================= -->
+    <br>
+    <p>
+        Don't have an account?
+        <a th:href="@{/register}">Register here</a>
+    </p>
+    <br>
+    <p>
+        <a th:href="@{/forgotPassword}">Forgot Password?</a>
+    </p>
+
+</div>
+
+</body>
+
+</html>

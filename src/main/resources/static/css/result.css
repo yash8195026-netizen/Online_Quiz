@@ -1,0 +1,124 @@
+/* =====================================================
+   RESULT.CSS
+   Result page and error pages
+   ===================================================== */
+
+
+/* ================= RESULT PAGE ================= */
+
+.result-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:80vh;
+    padding:20px;
+}
+
+.result-card{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+    min-width:400px;
+}
+
+.result-card h2{
+    margin-bottom:20px;
+    color:#111827;
+}
+
+.score-box{
+    font-size:48px;
+    font-weight:bold;
+    color:#385ced;
+    margin:20px 0;
+}
+
+.score-circle{
+    width:150px;
+    height:150px;
+
+    border-radius:50%;
+    border:10px solid #22c55e;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    margin:20px auto;
+
+    font-size:32px;
+    font-weight:bold;
+
+    color:#22c55e;
+}
+
+.percentage{
+    font-size:20px;
+    color:#6b7280;
+    margin-bottom:20px;
+}
+
+/* ================= QUIZ STATS ================= */
+
+.quiz-stats{
+    display:flex;
+    justify-content:space-around;
+    margin:25px 0;
+}
+
+.quiz-stats div{
+    text-align:center;
+}
+
+.quiz-stats strong{
+    font-size:28px;
+    color:#385ced;
+}
+
+/* ================= RESULT MESSAGE ================= */
+
+.result-message{
+    margin-bottom:25px;
+}
+
+.excellent{
+    color:#16a34a;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.good{
+    color:#2563eb;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.practice{
+    color:#dc2626;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* ================= ACTION BUTTONS ================= */
+
+.result-actions{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+/* ================= ERROR PAGES ================= */
+
+.error-page-title{
+    font-size:36px;
+    margin-bottom:20px;
+}
+
+.error-page-message{
+    font-size:18px;
+    color:#6b7280;
+    margin-bottom:20px;
+}

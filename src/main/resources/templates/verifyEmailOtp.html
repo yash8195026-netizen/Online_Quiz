@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Verify Email OTP</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Online Quiz</div>
+    </nav>
+
+    <!-- Verify Email OTP Form -->
+    <div class="form-container">
+
+        <h2>Verify Email OTP</h2>
+
+        <!-- Error Message -->
+        <div th:if="${error}">
+            <p style="color:red" th:text="${error}"></p>
+        </div>
+
+        <!-- OTP Form -->
+        <form th:action="@{/verifyEmailOtp}" method="post">
+
+            <!-- CSRF Token -->
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}" />
+
+            <!-- OTP Input -->
+            <input type="text"
+                   name="otp"
+                   placeholder="Enter OTP"
+                   required>
+
+            <br>
+
+            <!-- OTP Countdown Timer -->
+            <p id="timer"
+               style="color:red;font-weight:bold;">
+                OTP expires in 05:00
+            </p>
+
+            <br>
+
+            <!-- Actions -->
+            <button type="submit" class="home-btn">
+                Verify OTP
+            </button>
+
+            <a th:href="@{/resendEmailOtp}"
+               class="home-btn"
+               style="text-align:center;">
+                Resend OTP
+            </a>
+
+        </form>
+
+    </div>
+
+    <!-- OTP Timer Script -->
+    <script>
+        let timeLeft = 300;
+
+        const timer = setInterval(() => {
+
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+
+            document.getElementById("timer").innerText =
+                "OTP expires in " +
+                String(minutes).padStart(2, '0') +
+                ":" +
+                String(seconds).padStart(2, '0');
+
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                clearInterval(timer);
+
+                document.getElementById("timer").innerText =
+                    "OTP Expired. Request a new OTP.";
+            }
+
+        }, 1000);
+    </script>
+
+</body>
+</html>

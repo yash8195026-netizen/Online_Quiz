@@ -1,33 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Register</title>
-        <link rel="stylesheet" type="text/css" th:href="@{/css/auth.css}" />
-    </head>
-    <body>
+<head>
+    <title>Register</title>
 
-                   <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">Online Quiz </div>
-    </nav>
+<!-- Authentication Page Styles -->
+<link rel="stylesheet" type="text/css" th:href="@{/css/auth.css}" />
 
-        <div class="container">
-            <h2>Register</h2>
-            <div th:if="${error}" class="error">
-                <span th:text="${error}"></span>
-            </div>
-            <form th:action="@{/register}" th:object="${user}" method="post" class="form-group">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+</head>
 
-                <input type="text" th:field="*{username}" placeholder="Username" required>
-                <input type="email" th:field="*{email}" placeholder="Email" required>
-                <input type="password" th:field="*{password}" placeholder="Password"  required minlength="4">
-                 
-                <button type="submit">Register</button>
-            </form>
-            <br>
-            <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
-        </div>
+<body>
 
-    </body>
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+    <div class="logo">Online Quiz</div>
+</nav>
+
+<!-- ================= REGISTER CONTAINER ================= -->
+<div class="container">
+
+    <h2>Register</h2>
+
+    <!-- ================= ERROR MESSAGE ================= -->
+    <div th:if="${error}" class="error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- ================= REGISTER FORM ================= -->
+    <form th:action="@{/register}"
+          th:object="${user}"
+          method="post"
+          class="form-group">
+
+        <!-- CSRF Token -->
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+        <!-- Username -->
+        <input type="text"
+               th:field="*{username}"
+               placeholder="Username"
+               required>
+
+        <!-- Email -->
+        <input type="email"
+               th:field="*{email}"
+               placeholder="Email"
+               required>
+
+        <!-- Password -->
+        <input type="password"
+               th:field="*{password}"
+               placeholder="Password"
+               required
+               minlength="4">
+
+        <!-- Submit Button -->
+        <button type="submit">Register</button>
+
+    </form>
+
+    <!-- ================= LOGIN LINK ================= -->
+    <br>
+    <p>
+        Already have an account?
+        <a th:href="@{/login}">Login here</a>
+    </p>
+
+</div>
+
+</body>
+
 </html>
+ 

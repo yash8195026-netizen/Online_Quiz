@@ -1,0 +1,75 @@
+/* ================= HOME PAGE ================= */
+
+.dashboard-container{
+    max-width:900px;
+    margin:60px auto;
+    text-align:center;
+    padding:20px;
+}
+
+.dashboard-container h1{
+    font-size:42px;
+    color:#111827;
+    margin-bottom:15px;
+}
+
+.dashboard-subtitle{
+    font-size:18px;
+    color:#6b7280;
+    margin-bottom:40px;
+}
+
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.dashboard-card{
+    background:white;
+    text-decoration:none;
+    color:#111827;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+    transition:.3s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+}
+
+.dashboard-card h3{
+    margin-bottom:10px;
+    color:#385ced;
+    text-align: center;
+}
+
+.attempt-status{
+    margin-top:20px;
+    padding:10px;
+    border-radius:10px;
+    font-weight:bold;
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.attempt-status.locked{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.dashboard-stat-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+}
+
+/* ================= CATEGORY PAGE ================= */
+
+.category-actions{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:20px;
+}

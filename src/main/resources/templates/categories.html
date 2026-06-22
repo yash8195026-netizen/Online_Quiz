@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Manage Categories</title>
+
+<!-- Dark Mode -->
+<script>
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
+
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/home.css}">
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
+<link rel="stylesheet" th:href="@{/css/forms.css}">
+<link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ================= PAGE CONTENT ================= -->
+<div class="dashboard-container">
+
+    <!-- ================= ADD CATEGORY ================= -->
+    <div class="form-container">
+
+        <h2>Manage Categories</h2>
+
+        <form th:action="@{/categories/add}"
+              method="post">
+
+            <input type="text"
+                   name="name"
+                   placeholder="Enter Category Name"
+                   required>
+
+            <button type="submit"
+                    class="save-btn">
+
+                Add Category
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- ================= CATEGORY LIST ================= -->
+    <div class="card-grid">
+
+        <div class="dashboard-card"
+             th:each="category : ${categories}">
+
+            <h3 th:text="${category.name}">
+                Category Name
+            </h3>
+
+            <div class="category-actions">
+
+                <!-- Open Category -->
+                <a th:href="@{/quizList/{category}(category=${category.name})}"
+                   class="add-btn">
+
+                    Open
+
+                </a>
+
+                <!-- Delete Category -->
+                <form th:action="@{/categories/delete/{id}(id=${category.id})}"
+                      method="post">
+
+                    <button type="submit"
+                            class="delete-btn"
+                            onclick="return confirm('Delete this category?')">
+
+                        Delete
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Theme Script -->
+<script th:src="@{/js/theme.js}"></script>
+
+</body>
+</html>

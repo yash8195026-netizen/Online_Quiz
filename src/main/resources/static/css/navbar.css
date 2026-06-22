@@ -1,0 +1,144 @@
+/* =====================================================
+   NAVBAR.CSS
+   Navigation bar, menu links and theme button
+   ===================================================== */
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    background:linear-gradient(90deg,#2e55ef,#30809e);
+    color:white;
+    padding:18px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+/* ================= LOGO ================= */
+
+.logo{
+    font-size:34px;
+    font-weight:bold;
+}
+
+/* ================= RIGHT SECTION ================= */
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.nav-right form{
+    display:flex;
+    margin:0;
+}
+
+/* ================= MENU LINKS ================= */
+
+.topdiv{
+    display:flex;
+    margin-right:10px;
+}
+
+.topmenu{
+    color:black;
+    margin:0 10px;
+    padding:8px 12px;
+    font-size:18px;
+    text-decoration:none;
+    position:relative;
+}
+
+.topmenu::after{
+    content:'';
+    position:absolute;
+    width:0;
+    height:2px;
+    bottom:0;
+    left:0;
+    background-color:rgb(87,78,78);
+    transition:width .3s ease;
+}
+
+.topmenu:hover{
+    color:rgb(180,167,167);
+    background-color:rgba(47,6,131,.1);
+}
+
+.topmenu:hover::after{
+    width:100%;
+}
+
+/* ================= USERNAME BADGE ================= */
+
+.username{
+    color:white;
+    font-weight:700;
+    background:rgba(255,255,255,.15);
+    padding:10px 15px;
+    border-radius:25px;
+}
+
+.username:hover{
+    background:none;
+}
+
+/* ================= LOGOUT BUTTON ================= */
+
+.logout-btn{
+    background:#ec2b2b;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.logout-btn:hover{
+    opacity:.9;
+}
+
+/* ================= THEME BUTTON ================= */
+
+.theme-btn{
+    background:#374151;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:20px;
+    min-width:60px;
+    transition:.3s ease;
+}
+
+.theme-btn:hover{
+    opacity:.9;
+    transform:scale(1.05);
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+    .navbar{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .logo{
+        font-size:26px;
+    }
+
+    .nav-right{
+        flex-direction:column;
+    }
+
+    .topdiv{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+}

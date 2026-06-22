@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Change Email</title>
+
+<!-- Dark Mode -->
+<script>
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
+
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
+<link rel="stylesheet" th:href="@{/css/forms.css}">
+<link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ================= CHANGE EMAIL ================= -->
+<div class="form-container">
+
+    <h2>Change Email</h2>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="error-message">
+
+        <span th:text="${error}"></span>
+
+    </div>
+
+    <!-- Success Message -->
+    <div th:if="${success}" class="success-message">
+
+        <span th:text="${success}"></span>
+
+    </div>
+
+    <form th:action="@{/changeEmail}"
+          method="post">
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
+
+        <input type="email"
+               name="email"
+               placeholder="Enter New Email"
+               required>
+
+        <button type="submit"
+                class="save-btn">
+
+            Send OTP
+
+        </button>
+
+    </form>
+
+</div>
+
+<!-- Theme Script -->
+<script th:src="@{/js/theme.js}"></script>
+
+</body>
+</html>

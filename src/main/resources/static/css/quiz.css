@@ -1,0 +1,171 @@
+/* =====================================================
+   QUIZ.CSS
+   Quiz page and review page styles
+   ===================================================== */
+
+/* ================= QUIZ PAGE ================= */
+
+.quiz-container{
+    max-width:900px;
+    margin:40px auto;
+}
+
+.quiz-card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+.quiz-card h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.quiz-subtitle{
+    text-align:center;
+    color:#6b7280;
+    margin-bottom:25px;
+    font-size:16px;
+}
+
+.empty-message{
+    text-align:center;
+    padding:30px;
+    font-size:18px;
+    color:#6b7280;
+}
+
+/* ================= TIMER ================= */
+
+.quiz-timer{
+    position:sticky;
+    top:15px;
+
+    background:#ef4444;
+    color:white;
+
+    padding:12px;
+    border-radius:10px;
+
+    font-size:16px;
+    font-weight:bold;
+
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.timer-box{
+    font-size:16px;
+    font-weight:700;
+    color:white;
+    margin-top:8px;
+}
+
+/* ================= QUESTIONS ================= */
+
+.question-box{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    padding:22px;
+    margin-bottom:25px;
+    box-shadow:0 3px 10px rgba(0,0,0,.06);
+}
+
+.question-text{
+    white-space:normal;
+    font-family:Consolas, monospace;
+    background:#f8f9fa;
+    padding:15px;
+    border-left:4px solid #385ced;
+    border-radius:8px;
+    margin:10px 0;
+}
+
+/* ================= OPTIONS ================= */
+
+.option-box{
+    margin-top:10px;
+}
+
+.option-box label{
+    display:flex;
+    gap:10px;
+    cursor:pointer;
+    padding:8px;
+    transition:.3s;
+}
+
+.option-box label:hover{
+    transform:translateX(5px);
+    background:#eef4ff;
+    border-radius:8px;
+}
+
+/* ================= SUBMIT BUTTON ================= */
+
+.submit-btn{
+    width:100%;
+    background:#385ced;
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.submit-btn:hover{
+    background:#2748d6;
+}
+
+/* ================= REVIEW PAGE ================= */
+
+.review-answer.correct{
+    background:#dcfce7;
+    color:#15803d;
+    padding:12px 15px;
+    border-radius:10px;
+    margin-top:12px;
+    font-weight:600;
+}
+
+.review-answer.wrong{
+    background:#fee2e2;
+    color:#dc2626;
+    padding:12px 15px;
+    border-radius:10px;
+    margin-top:12px;
+    font-weight:600;
+}
+
+.review-correct-answer{
+    background:#eff6ff;
+    color:#1d4ed8;
+    padding:12px 15px;
+    border-radius:10px;
+    margin-top:10px;
+    font-weight:600;
+}
+
+.result-actions{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.home-btn{
+    text-decoration:none;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    
+    background:#3151d3;
+    display:inline-block;
+    margin-top:20px;
+}

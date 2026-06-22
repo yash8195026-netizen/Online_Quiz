@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Admin Dashboard</title>
+
+<!-- Dark Mode -->
+<script>
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
+
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/home.css}">
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
+<link rel="stylesheet" th:href="@{/css/forms.css}">
+<link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ================= DASHBOARD ================= -->
+<div class="dashboard-container">
+
+    <h2>📊 Admin Dashboard</h2>
+
+    <p class="dashboard-subtitle">
+        Monitor users, quizzes and platform activity.
+    </p>
+
+    <div class="card-grid">
+
+        <!-- Total Users -->
+        <div class="dashboard-card">
+
+            <h3>👥 Total Users</h3>
+
+            <h1 th:text="${totalUsers}"></h1>
+
+        </div>
+
+        <!-- Total Questions -->
+        <div class="dashboard-card">
+
+            <h3>❓ Total Questions</h3>
+
+            <h1 th:text="${totalQuestions}"></h1>
+
+        </div>
+
+        <!-- Total Attempts -->
+        <div class="dashboard-card">
+
+            <h3>📝 Total Attempts</h3>
+
+            <h1 th:text="${totalAttempts}"></h1>
+
+        </div>
+
+        <!-- Most Popular Category -->
+        <div class="dashboard-card">
+
+            <h3>🏆 Most Popular Category</h3>
+
+            <h1 th:text="${popularCategory}"></h1>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Theme Script -->
+<script th:src="@{/js/theme.js}"></script>
+
+
+</body>
+</html>

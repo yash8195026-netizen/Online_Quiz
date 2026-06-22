@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Quiz Review</title>
+
+<!-- Dark Mode -->
+<script>
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
+
+<link rel="stylesheet" th:href="@{/css/navbar1.css}">
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/quiz.css}">
+<link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+    <div class="logo">Online Quiz</div>
+</nav>
+
+<!-- ================= REVIEW SECTION ================= -->
+<div class="quiz-container">
+
+    <div class="quiz-card">
+
+        <h2>📖 Quiz Review</h2>
+
+        <!-- Questions -->
+        <div th:each="q, stat : ${questions}"
+             class="question-box">
+
+            <!-- Question Number -->
+            <h3>
+                Question
+                <span th:text="${stat.count}"></span>
+            </h3>
+
+            <!-- Question Text -->
+            <div class="question-text"
+                 th:text="${q.questionText}">
+            </div>
+
+            <!-- Correct Answer Selected -->
+            <div th:if="${answers['question_' + q.id] == q.correctAnswer}"
+                 class="review-answer correct">
+
+                <strong>✅ Your Answer:</strong>
+
+                <span th:text="${answers['question_' + q.id]}"></span>
+
+            </div>
+
+            <!-- Wrong Answer Selected -->
+            <div th:if="${answers['question_' + q.id] != null and answers['question_' + q.id] != q.correctAnswer}"
+                 class="review-answer wrong">
+
+                <strong>❌ Your Answer:</strong>
+
+                <span th:text="${answers['question_' + q.id]}"></span>
+
+            </div>
+
+            <!-- No Answer Selected -->
+            <div th:if="${answers['question_' + q.id] == null}"
+                 class="review-answer wrong">
+
+                <strong>❌ Your Answer:</strong>
+
+                <span>Not Answered</span>
+
+            </div>
+
+            <!-- Correct Answer -->
+            <div class="review-correct-answer">
+
+                <strong>✔ Correct Answer:</strong>
+
+                <span th:text="${q.correctAnswer}"></span>
+
+            </div>
+
+        </div>
+
+        <!-- Back Button -->
+        <div class="result-actions">
+
+            <a th:href="@{/home}"
+               class="home-btn">
+                Back To Home
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Theme Script -->
+<script th:src="@{/js/theme.js}"></script>
+
+
+</body>
+</html>

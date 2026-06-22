@@ -1,0 +1,83 @@
+<nav th:fragment="navbar"
+     class="navbar">
+
+<!-- ================= LOGO ================= -->
+<div class="logo">
+    Online Quiz
+</div>
+
+<!-- ================= RIGHT SECTION ================= -->
+<div class="nav-right">
+
+    <!-- ================= NAVIGATION LINKS ================= -->
+    <div class="topdiv">
+
+        <a th:href="@{/home}"
+           class="topmenu">
+            Home
+        </a>
+
+        <a th:href="@{/history}"
+           class="topmenu">
+            History
+        </a>
+
+        <a th:href="@{/leaderboard}"
+           class="topmenu">
+            Leaderboard
+        </a>
+
+        <!-- Admin Only -->
+        <a th:href="@{/categories}"
+           class="topmenu"
+           sec:authorize="hasRole('ADMIN')">
+            Categories
+        </a>
+
+        <a th:href="@{/dashboard}"
+           class="topmenu"
+           sec:authorize="hasRole('ADMIN')">
+            Dashboard
+        </a>
+
+        <!-- Profile -->
+        <a th:href="@{/profile}"
+           class="topmenu username">
+
+            Welcome,
+
+            <span th:text="${#authentication.name}"></span>
+
+        </a>
+
+    </div>
+
+    <!-- ================= DARK MODE BUTTON ================= -->
+    <button id="themeToggle"
+            class="theme-btn"
+            type="button">
+
+        🌙
+
+    </button>
+
+    <!-- ================= LOGOUT ================= -->
+    <form th:action="@{/logout}"
+          method="post">
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
+
+        <button type="submit"
+                class="logout-btn">
+
+            Logout
+
+        </button>
+
+    </form>
+
+</div>
+
+</nav>

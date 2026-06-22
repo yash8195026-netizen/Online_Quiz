@@ -1,0 +1,301 @@
+/* =====================================================
+   DARKMODE.CSS
+   Dark theme styles
+   ===================================================== */
+
+
+/* ================= BODY ================= */
+
+html.dark-mode,
+body.dark-mode{
+    background:#121212;
+    color:#e5e7eb;
+}
+
+/* ================= STAR BACKGROUND ================= */
+
+html.dark-mode body{
+
+    background-color:#121212;
+
+    background-image:
+        radial-gradient(rgba(255,255,255,.7) 1px, transparent 1px),
+        radial-gradient(rgba(255,255,255,.4) 1px, transparent 1px);
+
+    background-size:
+        100px 100px,
+        160px 160px;
+
+    background-position:
+        0 0,
+        50px 50px;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.dark-mode .navbar{
+    background:linear-gradient(90deg,#111827,#1f2937);
+}
+
+.dark-mode .logo{
+    color:white;
+}
+
+.dark-mode .topmenu{
+    color:white;
+}
+
+.dark-mode .topmenu:hover{
+    color:#60a5fa;
+}
+
+.dark-mode .username{
+    background:#374151;
+    color:white;
+}
+
+
+/* ================= MAIN CONTAINERS ================= */
+
+.dark-mode .form-container,
+.dark-mode .quiz-card,
+.dark-mode .result-card,
+.dark-mode .profile-card,
+.dark-mode .table-container,
+.dark-mode .question-box,
+.dark-mode .dashboard-card{
+    background:#1f2937;
+    color:#e5e7eb;
+}
+
+
+/* ================= HEADINGS ================= */
+
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4{
+    color:white;
+}
+
+
+/* ================= TEXT ================= */
+
+.dark-mode p,
+.dark-mode span,
+.dark-mode label{
+    color:#d1d5db;
+}
+
+.dark-mode .dashboard-subtitle{
+    color:#cbd5e1;
+}
+
+
+/* ================= TABLES ================= */
+
+.dark-mode table{
+    background:#1f2937;
+    color:white;
+}
+
+.dark-mode th{
+    background:#111827;
+    color:white;
+}
+
+.dark-mode td{
+    color:#e5e7eb;
+    border-color:#374151;
+}
+
+.dark-mode tr:hover{
+    background:#2d3748;
+}
+
+
+/* ================= FORMS ================= */
+
+.dark-mode input,
+.dark-mode textarea,
+.dark-mode select{
+    background:#111827;
+    color:white;
+    border:1px solid #374151;
+}
+
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder{
+    color:#9ca3af;
+}
+
+
+/* ================= QUIZ ================= */
+
+.dark-mode .question-text{
+    background:#111827;
+    color:white;
+}
+
+
+/* ================= REVIEW PAGE ================= */
+
+.dark-mode .review-answer.correct{
+    background:#14532d;
+    color:#bbf7d0;
+    border:1px solid #166534;
+}
+
+.dark-mode .review-answer.wrong{
+    background:#7f1d1d;
+    color:#fecaca;
+    border:1px solid #991b1b;
+}
+
+.dark-mode .review-correct-answer{
+    background:#1e3a8a;
+    color:#bfdbfe;
+    border:1px solid #2563eb;
+}
+
+
+/* ================= PROFILE ================= */
+
+.dark-mode .profile-header h3{
+    color:white;
+}
+
+.dark-mode .role-badge{
+    background:#14532d;
+    color:#bbf7d0;
+}
+
+.dark-mode .info-card{
+    background:#111827;
+    border-left:4px solid #60a5fa;
+}
+
+.dark-mode .label{
+    color:#d1d5db;
+}
+
+.dark-mode .info-card span{
+    color:#f3f4f6;
+}
+
+.dark-mode .profile-image img{
+    border-color:#60a5fa;
+}
+
+
+/* ================= SIDEBAR ================= */
+
+.dark-mode .sidebar{
+    background:linear-gradient(180deg,#111827,#1f2937);
+}
+
+.dark-mode .sidebar a{
+    color:white;
+}
+
+.dark-mode .sidebar a:hover{
+    background:#374151;
+}
+
+.dark-mode .sidebar a.active{
+    background:#2563eb;
+}
+
+
+/* ================= LEADERBOARD ================= */
+
+.dark-mode .leaderboard-content{
+    background:#121212;
+}
+
+.dark-mode .category-title{
+    color:white;
+}
+
+.dark-mode .current-user{
+    background:rgba(96,165,250,.18);
+}
+
+
+/* ================= RESULT PAGE ================= */
+
+.dark-mode .excellent{
+    color:#22c55e;
+}
+
+.dark-mode .good{
+    color:#3b82f6;
+}
+
+.dark-mode .practice{
+    color:#f59e0b;
+}
+
+.dark-mode .score-circle{
+    background:#111827;
+    color:white;
+}
+
+
+/* ================= BUTTONS ================= */
+
+.dark-mode .home-btn,
+.dark-mode .save-btn,
+.dark-mode .submit-btn,
+.dark-mode .edit-btn{
+    background:#2563eb;
+    color:white;
+}
+
+.dark-mode .home-btn:hover,
+.dark-mode .save-btn:hover,
+.dark-mode .submit-btn:hover,
+.dark-mode .edit-btn:hover{
+    background:#1d4ed8;
+}
+
+
+/* ================= DASHBOARD ================= */
+
+.dark-mode .dashboard-card:hover{
+    background:#273549;
+}
+
+.dark-mode .dashboard-card p{
+    color:#d1d5db;
+}
+
+
+/* ================= STATUS ================= */
+
+.dark-mode .attempt-status{
+    background:#1f3b2f;
+}
+
+.dark-mode .attempt-status.locked{
+    background:#3b1f1f;
+}
+
+
+/* ================= LINKS ================= */
+
+.dark-mode a{
+    color:#60a5fa;
+}
+
+.dark-mode a:hover{
+    color:#93c5fd;
+}
+
+
+/* ================= ERRORS ================= */
+
+.dark-mode .error{
+    color:#ef4444;
+}

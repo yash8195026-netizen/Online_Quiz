@@ -1,0 +1,23 @@
+/* =====================================================
+   NAVBAR1.CSS
+   Simple navbar used on quiz pages
+   ===================================================== */
+
+.navbar{
+    background:linear-gradient(90deg,#2e55ef,#30809e);
+
+    color:white;
+
+    padding:18px 40px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+.logo{
+    font-size:34px;
+    font-weight:bold;
+}

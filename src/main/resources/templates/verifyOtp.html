@@ -1,65 +1,107 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Verify OTP</title>
-    <link rel="stylesheet"
-          th:href="@{/css/auth.css}">
+
+    <!-- Authentication Styles -->
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
 </head>
+
 <body>
+
+    <!-- ================= NAVBAR ================= -->
     <nav class="navbar">
         <div class="logo">Online Quiz</div>
     </nav>
 
-<div class="container">
+    <!-- ================= OTP CONTAINER ================= -->
+    <div class="container">
 
-    <h2>Verify OTP</h2>
+        <h2>Verify OTP</h2>
 
-    <div th:if="${error}" class="error">
-        <span th:text="${error}"></span>
-    </div>
-    <div th:if="${success}" class="success">
-        <span th:text="${success}"></span>
-    </div>
-    <div class="otp-timer">
-        OTP expires in:
-    <span id="otpTimer"></span>
-    </div>
-    <form th:action="@{/verifyOtp}" method="post">
+        <!-- Error Message -->
+        <div th:if="${error}" class="error">
+            <span th:text="${error}"></span>
+        </div>
 
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-        <input type="text" name="otp" placeholder="Enter OTP" required>
-        <button type="submit">
-            Verify OTP
-        </button>
-    </form>
-       <script th:inline="javascript">
+        <!-- Success Message -->
+        <div th:if="${success}" class="success">
+            <span th:text="${success}"></span>
+        </div>
+
+        <!-- OTP Timer -->
+        <div class="otp-timer">
+            OTP expires in:
+            <span id="otpTimer"></span>
+        </div>
+
+        <!-- Verify OTP Form -->
+        <form th:action="@{/verifyOtp}" method="post">
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <input type="text"
+                   name="otp"
+                   placeholder="Enter OTP"
+                   required>
+
+            <button type="submit">
+                Verify OTP
+            </button>
+
+        </form>
+
+        <br>
+
+        <!-- Resend OTP -->
+        <form th:action="@{/resendOtp}" method="post">
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <button type="submit">
+                Resend OTP
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- ================= OTP TIMER SCRIPT ================= -->
+    <script th:inline="javascript">
+
         let timeLeft = /*[[${remainingTime}]]*/ 300;
-        function startOtpTimer(){
-        let timer = setInterval(function(){
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
 
-        document.getElementById("otpTimer").innerText =minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        function startOtpTimer() {
 
-        if(timeLeft <= 0){
-            clearInterval(timer);
-            location.reload();
-            return;
+            const timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+
+                document.getElementById("otpTimer").textContent =
+                        minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    // Refresh page when OTP expires
+                    location.reload();
+                    return;
+                }
+                timeLeft--;
+            }, 1000);
         }
-        timeLeft--;
-        },1000);
-    }
         startOtpTimer();
-    </script>
-    <br>
-    <form th:action="@{/resendOtp}" method="post">
-        <input type="hidden"th:name="${_csrf.parameterName}"th:value="${_csrf.token}">
-        <button type="submit">
-            Resend OTP
-        </button>
-    </form>
 
-</div>
+    </script>
 
 </body>
+
 </html>

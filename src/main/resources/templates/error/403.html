@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>403 - Access Denied</title>
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+    <!-- Access Denied Card -->
+    <div class="result-container">
+
+        <div class="result-card">
+
+            <h2>🚫 Access Denied</h2>
+
+            <p class="percentage">
+                You don't have permission to access this page.
+            </p>
+
+            <div class="result-actions">
+                <a th:href="@{/home}" class="home-btn">
+                    Back To Home
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

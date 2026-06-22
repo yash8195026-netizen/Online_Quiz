@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Leaderboard</title>
+
+<!-- Dark Mode -->
+<script>
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
+
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
+<link rel="stylesheet" th:href="@{/css/forms.css}">
+<link rel="stylesheet" th:href="@{/css/leaderboard.css}">
+<link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ================= LEADERBOARD LAYOUT ================= -->
+<div class="leaderboard-layout">
+
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar">
+
+        <div class="sidebar-title">
+            🏆 Categories
+        </div>
+
+        <a th:each="cat : ${categories}"
+           th:href="@{/leaderboard(category=${#strings.toLowerCase(cat.name)})}"
+           th:text="${cat.name}"
+           th:classappend="${selectedCategory.equalsIgnoreCase(cat.name)} ? ' active'">
+        </a>
+
+    </div>
+
+    <!-- ================= CONTENT ================= -->
+    <div class="leaderboard-content">
+
+        <div class="form-container">
+
+            <h2>🏆 Leaderboard</h2>
+
+            <div class="category-title">
+
+                Top Players In
+
+                <span th:text="${selectedCategory.toUpperCase()}"></span>
+
+            </div>
+
+            <!-- ================= TABLE ================= -->
+            <div th:if="${leaderboard != null and !#lists.isEmpty(leaderboard)}"
+                 class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Score</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="entry, stat : ${leaderboard}"
+                            th:classappend="${entry.username == #authentication.name} ? ' current-user'">
+
+                            <!-- Rank -->
+                            <td>
+
+                                <span th:if="${stat.count == 1}">🥇</span>
+                                <span th:if="${stat.count == 2}">🥈</span>
+                                <span th:if="${stat.count == 3}">🥉</span>
+
+                                <span th:if="${stat.count > 3}"
+                                      th:text="${stat.count}">
+                                </span>
+
+                            </td>
+
+                            <!-- Username -->
+                            <td th:text="${entry.username}"></td>
+
+                            <!-- Score -->
+                            <td>
+
+                                <span th:text="${entry.score}"></span>
+                                /
+                                <span th:text="${entry.totalQuestions}"></span>
+
+                            </td>
+
+                            <!-- Percentage -->
+                            <td>
+
+                                <span th:text="${#numbers.formatDecimal(entry.percentage,1,2)}"></span>%
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${leaderboard == null or #lists.isEmpty(leaderboard)}"
+                 class="empty-message">
+
+                No leaderboard data available for this category.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Theme Script -->
+<script th:src="@{/js/theme.js}"></script>
+
+</body>
+</html>

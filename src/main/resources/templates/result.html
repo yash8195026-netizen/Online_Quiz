@@ -1,56 +1,117 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
+
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <title>Quiz Result</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+<!-- Dark Mode -->
+<script>
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
+
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
+<link rel="stylesheet" th:href="@{/css/result.css}">
+<link rel="stylesheet" th:href="@{/css/forms.css}">
+<link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
 </head>
+
 <body>
 
-    <!-- Navbar -->     
-   <nav class="navbar">
-    <div class="logo">Online Quiz</div>
-    <div class="nav-right">
-        <div class="topdiv">
-            <a class="topmenu" th:href="@{/home}">Home</a>
-            <a class="topmenu" th:href="@{/quiz}">Quiz</a>
-            <a class="topmenu" th:href="@{/quizList}" sec:authorize="hasRole('ADMIN')">Manage Quiz </a>
-            <a class="topmenu" th:href="@{/profile}" class="topmenu username">Welcome,<span th:text="${#authentication.name}"></span></a>
-        </div>
-        
-            <form th:action="@{/logout}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="logout-btn"> Logout </button>
-            </form>
-        </div>
-    </nav>
 
-    <!-- Result Section -->
-    <div class="result-container">
-        <div class="result-card">
-            <h2>🎉 Quiz Completed</h2>
-            <p>Your Score</p>
-            <div class="score-box">
-                <span th:text="${score}"></span>
-                /
-                <span th:text="${totalQuestions}"></span>
-            </div>
-            <p class="percentage"> Percentage: 
-                <span th:text="${#numbers.formatDecimal(percentage,1,1)}"></span>% 
-            </p>
-            <div class="result-message">
-                <p th:if="${score == totalQuestions}" class="excellent"> 🎉 Excellent! Perfect Score </p>
-                <p th:if="${score >= totalQuestions/2 and score < totalQuestions}" class="good"> 👍 Good Job! Keep it Up </p>
-                <p th:if="${score < totalQuestions/2}" class="practice"> 📚 Keep Practicing! You'll Do Better Next Time </p>
-            </div>
-            <div th:if="${error}" class="error">
-                <span th:text="${error}"></span>
-            </div>
-            <div class="result-actions">
-                <a th:href="@{/home}" class="home-btn"> Back To Home </a>
-                <a th:href="@{/quiz}" class="home-btn"> Retake Quiz </a>
-            </div>
+<!-- ================= NAVBAR ================= -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ================= RESULT SECTION ================= -->
+<div class="result-container">
+
+    <div class="result-card">
+
+        <h2>🎉 Quiz Completed</h2>
+
+        <p>Your Score</p>
+
+        <!-- Percentage Circle -->
+        <div class="score-circle">
+            <span th:text="${#numbers.formatDecimal(percentage,1,0)}"></span>%
         </div>
+
+        <!-- Quiz Statistics -->
+        <div class="quiz-stats">
+
+            <div>
+                <strong th:text="${score}"></strong>
+                <p>Correct</p>
+            </div>
+
+            <div>
+                <strong th:text="${totalQuestions - score}"></strong>
+                <p>Wrong</p>
+            </div>
+
+            <div>
+                <strong th:text="${totalQuestions}"></strong>
+                <p>Total</p>
+            </div>
+
+        </div>
+
+        <!-- Percentage -->
+        <p class="percentage">
+            Percentage:
+            <span th:text="${#numbers.formatDecimal(percentage,1,1)}"></span>%
+        </p>
+
+        <!-- Performance Message -->
+        <div class="result-message">
+
+            <p th:if="${score == totalQuestions}"
+               class="excellent">
+                🎉 Excellent! Perfect Score
+            </p>
+
+            <p th:if="${score >= totalQuestions/2 and score < totalQuestions}"
+               class="good">
+                👍 Good Job! Keep It Up
+            </p>
+
+            <p th:if="${score < totalQuestions/2}"
+               class="practice">
+                📚 Keep Practicing! You'll Do Better Next Time
+            </p>
+
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${error}" class="error">
+            <span th:text="${error}"></span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="result-actions">
+
+            <a th:href="@{/home}" class="home-btn">
+                Back To Home
+            </a>
+
+            <a th:href="@{/review}" class="home-btn">
+                Review Answers
+            </a>
+
+        </div>
+
     </div>
+
+</div>
+
+<!-- Theme Script -->
+<script th:src="@{/js/theme.js}"></script>
+
+
 </body>
 </html>

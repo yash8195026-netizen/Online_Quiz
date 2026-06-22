@@ -1,100 +1,197 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
+
     <title>Take Quiz</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+    <!-- Apply saved theme before page render -->
+    <script>
+        if (localStorage.getItem("theme") === "dark") {
+            document.documentElement.classList.add("dark-mode");
+        }
+    </script>
+
+    <link rel="stylesheet" th:href="@{/css/navbar1.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/quiz.css}">
+    <link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
+    <!-- Prevent Browser Cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
 </head>
+
 <body>
 
-    <!-- Navbar -->     
-   <nav class="navbar">
-    <div class="logo">Online Quiz</div>
-    <div class="nav-right">
-        <div class="topdiv">
-            <a class="topmenu" th:href="@{/home}">Home</a>
-            <a class="topmenu" th:href="@{/quiz}">Quiz</a>
-            <a class="topmenu" th:href="@{/quizList}" sec:authorize="hasRole('ADMIN')">Manage Quiz </a>
-            <a class="topmenu" th:href="@{/profile}" class="topmenu username">Welcome,<span th:text="${#authentication.name}"></span></a>
-        </div>
-            <form th:action="@{/logout}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="logout-btn"> Logout </button>
-            </form>
-        </div>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="logo">Online Quiz</div>
     </nav>
 
-    <!-- Quiz Section -->
+    <!-- ================= QUIZ CONTAINER ================= -->
     <div class="quiz-container">
+
         <div class="quiz-card">
-            <h2>📝 Quiz Challenge</h2>
+
+            <h2>
+                📝
+                <span th:text="${#strings.toUpperCase(category)}"></span>
+                Quiz
+            </h2>
+
             <p class="quiz-subtitle">
                 Select the correct answer for each question.
             </p>
 
+            <!-- Timer -->
             <div class="quiz-timer">
-                Time Left:<span id="timer"></span>
-            </div>
-            <form id="quizForm" th:action="@{/submit}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-                <div th:if="${#lists.isEmpty(questions)}" class="empty-message">
+                ⏳ Time Left
+
+                <div id="timer" class="timer-box"></div>
+
+            </div>
+
+            <!-- Quiz Form -->
+            <form id="quizForm" th:action="@{/submit}" method="post">
+
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+
+                <!-- No Questions -->
+                <div th:if="${#lists.isEmpty(questions)}"
+                     class="empty-message">
+
                     No quiz questions available.
+
                 </div>
 
-                <div class="question-box" th:each="q, stat : ${questions}">
+                <!-- Questions -->
+                <div class="question-box"
+                     th:each="q, stat : ${questions}">
 
-                    <div class="question-text" th:text="${q.questionText}"></div>
+                    <div class="question-text">
+
+                        Q<span th:text="${stat.count}"></span>.
+
+                        <span th:text="${q.questionText}"></span>
+
+                    </div>
+
+                    <!-- Options -->
                     <div class="option-box">
 
-                    <label>
-                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option1}" required>
-                    <span th:text="${q.option1}"></span>
-                    </label>
+                        <label>
+                            <input type="radio"
+                                   th:name="${'question_' + q.id}"
+                                   th:value="${q.option1}"
+                                   required>
 
-                    <label>
-                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option2}">
-                    <span th:text="${q.option2}"></span>
-                    </label>
+                            <span th:text="${q.option1}"></span>
+                        </label>
 
-                    <label>
-                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option3}">
-                    <span th:text="${q.option3}"></span>
-                    </label>
+                        <label>
+                            <input type="radio"
+                                   th:name="${'question_' + q.id}"
+                                   th:value="${q.option2}">
 
-                    <label>
-                    <input type="radio" th:name="${'question_' + q.id}" th:value="${q.option4}">
-                    <span th:text="${q.option4}"></span>
-                    </label>
+                            <span th:text="${q.option2}"></span>
+                        </label>
+
+                        <label>
+                            <input type="radio"
+                                   th:name="${'question_' + q.id}"
+                                   th:value="${q.option3}">
+
+                            <span th:text="${q.option3}"></span>
+                        </label>
+
+                        <label>
+                            <input type="radio"
+                                   th:name="${'question_' + q.id}"
+                                   th:value="${q.option4}">
+
+                            <span th:text="${q.option4}"></span>
+                        </label>
+
+                    </div>
 
                 </div>
-                </div>
-                <button type="submit" class="submit-btn" th:if="${!#lists.isEmpty(questions)}">
+
+                <!-- Submit Button -->
+                <button type="submit"
+                        class="submit-btn"
+                        th:if="${!#lists.isEmpty(questions)}">
                     Submit Quiz
                 </button>
+
             </form>
+
         </div>
+
     </div>
-</body>
+
+    <!-- ================= QUIZ TIMER ================= -->
     <script th:inline="javascript">
+
         let timeLeft = /*[[${quizTime}]]*/ 600;
-        function startTimer(){
 
-        let timer = setInterval(function(){
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
+        function startTimer() {
 
-        document.getElementById("timer").innerText =minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            let timer = setInterval(function () {
 
-        if(timeLeft <= 0){
-            clearInterval(timer);
-            alert("Time is up!");
-            document.getElementById("quizForm").submit();
-            return;
-        }
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+
+                document.getElementById("timer").innerText =
+                        minutes + ":" +
+                        (seconds < 10 ? "0" : "") +
+                        seconds;
+
+                if (timeLeft <= 0) {
+
+                    clearInterval(timer);
+
+                    alert("Time is up!");
+
+                    document.getElementById("quizForm").submit();
+
+                    return;
+                }
+
                 timeLeft--;
-            },1000);
+
+            }, 1000);
         }
-        startTimer();
+
+        window.onload = startTimer;
+
+        /* Prevent cached quiz page */
+        window.addEventListener("pageshow", function (event) {
+
+            if (event.persisted) {
+                window.location.reload();
+            }
+
+        });
+
+        /* Disable browser back button */
+        history.pushState(null, null, location.href);
+
+        window.addEventListener("popstate", function () {
+            history.pushState(null, null, location.href);
+        });
+
     </script>
+
+    <!-- Theme Script -->
+    <script th:src="@{/js/theme.js}"></script>
+
+</body>
+
 </html>

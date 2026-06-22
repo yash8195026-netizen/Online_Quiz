@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Quiz History</title>
+
+<!-- Dark Mode -->
+<script>
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
+
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
+<link rel="stylesheet" th:href="@{/css/forms.css}">
+<link rel="stylesheet" th:href="@{/css/darkmode.css}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ================= HISTORY SECTION ================= -->
+<div class="form-container">
+
+    <h2>Quiz History</h2>
+
+    <!-- No History Available -->
+    <div th:if="${#lists.isEmpty(history)}"
+         class="empty-message">
+
+        No quiz attempts found.
+
+    </div>
+
+    <!-- History Table -->
+    <div th:if="${!#lists.isEmpty(history)}"
+         class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr th:each="result : ${history}">
+
+                    <td th:text="${result.category}"></td>
+
+                    <td>
+                        <span th:text="${result.score}"></span>
+                        /
+                        <span th:text="${result.totalQuestions}"></span>
+                    </td>
+
+                    <td>
+                        <span th:text="${#numbers.formatDecimal(result.percentage,1,1)}"></span>%
+                    </td>
+
+                    <td th:text="${#temporals.format(result.attemptDate,'dd-MM-yyyy, HH:mm:ss')}"></td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- Theme Script -->
+<script th:src="@{/js/theme.js}"></script>
+
+</body>
+</html>

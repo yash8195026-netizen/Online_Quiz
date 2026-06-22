@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>500 - Server Error</title>
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+    <!-- Server Error Card -->
+    <div class="result-container">
+
+        <div class="result-card">
+
+            <h2>⚠ Something Went Wrong</h2>
+
+            <p class="percentage">
+                An unexpected error occurred.
+            </p>
+
+            <div class="result-actions">
+                <a th:href="@{/home}" class="home-btn">
+                    Back To Home
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
