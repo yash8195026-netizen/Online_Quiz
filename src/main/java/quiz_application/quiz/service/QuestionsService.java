@@ -44,7 +44,7 @@ public class QuestionsService {
     public List<Question> loadQuizzesByCategory(
             String categoryName) {
 
-        return questionRepository.findByCategory_Name(
+        return questionRepository.findByCategory_NameIgnoreCase(
                 categoryName);
     }
 
@@ -55,7 +55,7 @@ public class QuestionsService {
             String categoryName,
             int page) {
 
-        return questionRepository.findByCategory_Name(
+        return questionRepository.findByCategory_NameIgnoreCase(
                 categoryName,
                 PageRequest.of(page, 10));
     }

@@ -20,14 +20,15 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
      * Load all questions
      * for a specific category.
      */
-    List<Question> findByCategory_Name(
-            String categoryName);
+  
+    List<Question> findByCategory_NameIgnoreCase(String categoryName);
 
     /**
      * Load paginated questions
      * for a specific category.
      */
-    Page<Question> findByCategory_Name(
-            String categoryName,
-            Pageable pageable);
+    Page<Question> findByCategory_NameIgnoreCase(
+        String categoryName,
+        Pageable pageable);
+        
 }
