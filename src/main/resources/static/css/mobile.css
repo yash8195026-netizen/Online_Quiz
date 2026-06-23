@@ -1,0 +1,183 @@
+/* ===============================
+   MOBILE RESPONSIVE
+   =============================== */
+
+@media screen and (max-width: 768px) {
+
+    /* Navbar */
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+        height: auto;
+    }
+
+    .logo {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+    }
+
+    .user-section {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* Main Container */
+    .container,
+    .dashboard-container,
+    .manage-container {
+        width: 95%;
+        margin: auto;
+        padding: 15px;
+    }
+
+    /* Forms */
+    input,
+    select,
+    textarea {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    /* Category Cards */
+    .category-grid,
+    .categories-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .category-card {
+        width: 100%;
+    }
+
+    /* Tables */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Quiz Page */
+    .quiz-container {
+        width: 95%;
+    }
+
+    .question-box {
+        padding: 15px;
+    }
+
+    .option-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Leaderboard */
+    .leaderboard-container {
+        width: 95%;
+        overflow-x: auto;
+    }
+
+    /* Dashboard Cards */
+    .card-container,
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    /* Images */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+/* Dark mode toggle button */
+.theme-toggle,
+.dark-toggle,
+.theme-btn {
+    width: 55px !important;
+    height: 34px !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 !important;
+    margin: 0 auto;
+
+    flex-shrink: 0;
+}
+
+}
+
+
+/* ===============================
+   SMALL PHONES
+   =============================== */
+
+@media screen and (max-width: 480px) {
+
+    .logo {
+        font-size: 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+    }
+
+    .category-card {
+        padding: 15px;
+    }
+
+    .welcome-badge {
+        font-size: 13px;
+    }
+
+    .logout-btn {
+        width: auto;
+    }
+
+.theme-toggle,
+.dark-toggle,
+.theme-btn {
+    width: 48px !important;
+    height: 30px !important;
+}
+}
