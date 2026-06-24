@@ -21,6 +21,14 @@
     flex:1;
 }
 
+.table-container{
+    width:100%;
+}
+
+.table-container table{
+    width:100%;
+}
+
 
 /* ================= SIDEBAR ================= */
 
@@ -149,6 +157,10 @@
         box-sizing:border-box;
     }
 
+    .form-container h2{
+        font-size:42px;
+    }
+
     .category-title{
 
         font-size:20px;
@@ -158,7 +170,7 @@
     table{
 
         width:100%;
-        min-width:600px;
+        min-width:500px;
     }
 
     .table-container{
