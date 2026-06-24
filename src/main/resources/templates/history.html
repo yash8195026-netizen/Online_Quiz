@@ -72,7 +72,15 @@
                         <span th:text="${#numbers.formatDecimal(result.percentage,1,1)}"></span>%
                     </td>
 
-                    <td th:text="${#temporals.format(result.attemptDate,'dd-MM-yyyy, HH:mm:ss')}"></td>
+                    <td>
+                        <span class="desktop-date"
+                                th:text="${#temporals.format(result.attemptDate,'dd-MM-yyyy, HH:mm:ss')}">
+                        </span>
+
+                        <span class="mobile-date"
+                                th:text="${#temporals.format(result.attemptDate,'dd-MM-yy')}">
+                        </span>
+                    </td>
 
                 </tr>
 

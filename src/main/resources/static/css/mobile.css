@@ -7,6 +7,14 @@ body {
     overflow-x: hidden;
 }
 
+.desktop-date{
+    display:inline;
+}
+
+.mobile-date{
+    display:none;
+}
+
 @media screen and (max-width: 768px) {
 
     /* Containers */
@@ -28,6 +36,17 @@ body {
     textarea {
         width: 100%;
         box-sizing: border-box;
+    }
+
+    .form-container{
+        width:95%;
+        max-width:100%;
+        margin:20px auto;
+        padding:15px;
+    }
+
+     .form-container h2{
+        font-size:32px;
     }
 
     button {
@@ -52,11 +71,15 @@ body {
     }
 
     /* Tables */
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        width: 100%;
+    .table-container{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+   .table-container table{
+        width:max-content;
+        min-width:330px;
     }
 
     /* Quiz */
@@ -102,7 +125,18 @@ body {
 
         flex-shrink: 0;
     }
+
+    .desktop-date{
+        display:none;
+    }
+
+    .mobile-date{
+        display:inline;
+    }
+
 }
+
+
 
 /* ===============================
    SMALL PHONES
@@ -141,4 +175,5 @@ body {
         width: 48px !important;
         height: 30px !important;
     }
+
 }
