@@ -120,25 +120,89 @@
     transform:scale(1.05);
 }
 
+/* ================= HAMBURGER BUTTON ================= */
+
+.menu-toggle{
+    display:none;
+}
+
 /* ================= MOBILE ================= */
 
 @media(max-width:768px){
 
     .navbar{
-        flex-direction:column;
-        gap:15px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    position:relative;
     }
 
     .logo{
-        font-size:26px;
+    flex:1;
+    text-align:center;
+    }
+
+    .menu-toggle{
+        display:block;
+        background:none;
+        border:none;
+        color:white;
+        font-size:32px;
+        cursor:pointer;
     }
 
     .nav-right{
+        display:none;
+
+        position:absolute;
+        top:75px;
+        left:0;
+
+        width:100%;
+
+        background:#1f2937;
+
         flex-direction:column;
+
+        padding:20px;
+
+        box-sizing:border-box;
+
+        z-index:999;
+    }
+
+    .nav-right.show{
+        display:flex;
     }
 
     .topdiv{
-        flex-wrap:wrap;
-        justify-content:center;
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        margin-right:0;
+    }
+
+    .topmenu{
+        width:100%;
+        margin:0;
+        padding:12px;
+        text-align:left;
+        color:white;
+    }
+
+    .username{
+        margin-top:10px;
+        text-align:center;
+    }
+
+    .theme-btn{
+        margin-top:10px;
+        align-self:center;
+    }
+
+    .logout-btn{
+        width:100%;
+        margin-top:10px;
     }
 }
