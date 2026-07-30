@@ -8,13 +8,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @GetMapping("/google-test")
+   @GetMapping("/smtp465")
 @ResponseBody
-public String test() {
-
-    try (Socket socket = new Socket("google.com", 80)) {
-        return "CONNECTED";
+public String smtp465() {
+    try (Socket socket = new Socket("smtp.gmail.com", 465)) {
+        return "CONNECTED 465";
     } catch (Exception e) {
+        e.printStackTrace();
+        return e.toString();
+    }
+}
+@GetMapping("/smtp587")
+@ResponseBody
+public String smtp587() {
+    try (Socket socket = new Socket("smtp.gmail.com", 587)) {
+        return "CONNECTED 587";
+    } catch (Exception e) {
+        e.printStackTrace();
         return e.toString();
     }
 }
