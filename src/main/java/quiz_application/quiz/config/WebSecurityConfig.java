@@ -106,7 +106,7 @@ public class WebSecurityConfig {
                         "/resendEmailOtp",
                         "/changeProfilePicture",
 
-                        "/smtp-test"
+                        "/google-test"
                 ).hasAnyRole("USER", "ADMIN")
 
                 .anyRequest().authenticated()
