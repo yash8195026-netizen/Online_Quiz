@@ -31,17 +31,22 @@ public class EmailService {
      * @param body    Email body
      */
     public void sendEmail(
-            String to,
-            String subject,
-            String body) {
+        String to,
+        String subject,
+        String body) {
 
-        SimpleMailMessage message =
-                new SimpleMailMessage();
+    System.out.println("===== EMAIL DEBUG =====");
+    System.out.println("To      : " + to);
+    System.out.println("Subject : " + subject);
 
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
+    SimpleMailMessage message = new SimpleMailMessage();
 
-        mailSender.send(message);
-    }
+    message.setTo(to);
+    message.setSubject(subject);
+    message.setText(body);
+
+    mailSender.send(message);
+
+    System.out.println("EMAIL SENT SUCCESSFULLY");
+}
 }

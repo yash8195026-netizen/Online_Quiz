@@ -134,12 +134,14 @@ public class AuthController {
 
         } catch (Exception e) {
 
-            model.addAttribute(
-                    "error",
-                    "Unable to send OTP");
+    e.printStackTrace();   // VERY IMPORTANT
 
-            return "register";
-        }
+    model.addAttribute(
+            "error",
+            e.getClass().getSimpleName() + " : " + e.getMessage());
+
+    return "register";
+}
     }
 
     // =====================================================
@@ -351,12 +353,14 @@ public class AuthController {
 
         } catch (Exception e) {
 
-            model.addAttribute(
-                    "error",
-                    "Unable to send OTP");
+    e.printStackTrace();   // VERY IMPORTANT
 
-            return "forgotPassword";
-        }
+    model.addAttribute(
+            "error",
+            e.getClass().getSimpleName() + " : " + e.getMessage());
+
+    return "register";
+}
     }
 
     @GetMapping("/resetPasswordOtp")
