@@ -100,7 +100,7 @@ public class AuthController {
 
                 model.addAttribute(
                         "error",
-                        "Username already exists");
+                        "This username is already taken. Please choose another one.");
 
                 return "register";
             }
@@ -109,7 +109,7 @@ public class AuthController {
 
                 model.addAttribute(
                         "error",
-                        "Email already exists");
+                        "An account with this email already exists. Try logging in or use a different email.");
 
                 return "register";
             }
@@ -127,8 +127,8 @@ public class AuthController {
 
             emailService.sendEmail(
                     user.getEmail(),
-                    "Quiz Application OTP Verification",
-                    "Your OTP is: " + otp);
+                    "Online Quiz Application OTP Verification",
+                    "Your OTP is: " + otp + "\n\nPlease note: This OTP will expire in 5 minutes.");
 
             return "redirect:/verifyOtp";
 
@@ -136,7 +136,7 @@ public class AuthController {
 
             model.addAttribute(
                     "error",
-                    "Unable to send OTP");
+                    "We were unable to send your OTP at this time. Please try again later.");
 
             return "register";
         }
@@ -298,11 +298,11 @@ public class AuthController {
         emailService.sendEmail(
                 pendingUser.getEmail(),
                 "Quiz Application OTP Verification",
-                "Your OTP is: " + otp);
+                "Your OTP is: " + otp+ "\n\nPlease note: This OTP will expire in 5 minutes.");
 
         model.addAttribute(
                 "success",
-                "New OTP sent successfully");
+                "A new OTP has been sent to your email. Please check your inbox.");
 
         return "verifyOtp";
     }
@@ -327,7 +327,7 @@ public class AuthController {
 
             model.addAttribute(
                     "error",
-                    "Email not registered");
+                    "No account found with this email. Please register first.");
 
             return "forgotPassword";
         }
@@ -345,7 +345,7 @@ public class AuthController {
             emailService.sendEmail(
                     email,
                     "Password Reset OTP",
-                    "Your OTP For Password Change is: " + otp);
+                    "Your OTP For Password Change is: " + otp+ "\n\nPlease note: This OTP will expire in 5 minutes.");
 
             return "redirect:/resetPasswordOtp";
 
@@ -353,7 +353,7 @@ public class AuthController {
 
             model.addAttribute(
                     "error",
-                    "Unable to send OTP");
+                    "Sorry, we couldn’t send your OTP at this time. Please try again later.");
 
             return "forgotPassword";
         }
