@@ -104,10 +104,8 @@ public class WebSecurityConfig {
                         "/changeEmail",
                         "/verifyEmailOtp",
                         "/resendEmailOtp",
-                        "/changeProfilePicture",
+                        "/changeProfilePicture"
 
-                        "/smtp465",
-                        "/smtp587"
                 ).hasAnyRole("USER", "ADMIN")
 
                 .anyRequest().authenticated()

@@ -1,52 +1,76 @@
 package quiz_application.quiz.service;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import java.io.IOException;
+
+import okhttp3.*;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-/**
- * Email Service
- *
- * Responsible for sending emails such as:
- * - Registration OTP
- * - Password Reset OTP
- * - Email Change OTP
- */
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${BREVO_API_KEY}")
+    private String apiKey;
 
-    public EmailService(
-            JavaMailSender mailSender) {
+    private final OkHttpClient client = new OkHttpClient();
 
-        this.mailSender = mailSender;
+    public void sendEmail(String to,
+                          String subject,
+                          String body) {
+
+        String json = """
+        {
+          "sender":{
+            "name":"Quiz Application",
+            "email":"project.work81950@gmail.com"
+          },
+          "to":[
+            {
+              "email":"%s"
+            }
+          ],
+          "subject":"%s",
+          "textContent":"%s"
+        }
+        """.formatted(
+                to,
+                subject.replace("\"","\\\""),
+                body.replace("\"","\\\"")
+        );
+
+        RequestBody requestBody =
+                RequestBody.create(
+                        json,
+                        MediaType.parse("application/json"));
+
+        Request request =
+                new Request.Builder()
+                        .url("https://api.brevo.com/v3/smtp/email")
+                        .addHeader("accept", "application/json")
+                        .addHeader("api-key", apiKey)
+                        .addHeader("content-type", "application/json")
+                        .post(requestBody)
+                        .build();
+
+        try (Response response = client.newCall(request).execute()) {
+
+            if (!response.isSuccessful()) {
+
+                String error =
+                        response.body() != null
+                                ? response.body().string()
+                                : "Unknown error";
+
+                throw new RuntimeException(
+                        "Brevo Error: " + error);
+            }
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Unable to send email",
+                    e);
+        }
     }
-
-    /**
-     * Send a simple text email.
-     *
-     * @param to      Recipient email
-     * @param subject Email subject
-     * @param body    Email body
-     */
-    public void sendEmail(
-        String to,
-        String subject,
-        String body) {
-
-    System.out.println("===== EMAIL DEBUG =====");
-    System.out.println("To      : " + to);
-    System.out.println("Subject : " + subject);
-
-    SimpleMailMessage message = new SimpleMailMessage();
-
-    message.setTo(to);
-    message.setSubject(subject);
-    message.setText(body);
-
-    mailSender.send(message);
-
-    System.out.println("EMAIL SENT SUCCESSFULLY");
-}
 }
