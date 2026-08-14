@@ -2,7 +2,11 @@ package quiz_application.quiz.service;
 
 import java.io.IOException;
 
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,43 +14,50 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-    @Value("${BREVO_API_KEY:}")
+    @Value("${BREVO_API_KEY}")
     private String apiKey;
 
-    private final OkHttpClient client = new OkHttpClient();
+    private static final String BREVO_URL =
+            "https://api.brevo.com/v3/smtp/email";
 
+    private static final String SENDER_NAME =
+            "Quiz Application";
+
+    private static final String SENDER_EMAIL =
+            "project.work81950@gmail.com";
+
+    private final OkHttpClient client =
+            new OkHttpClient();
+
+    /**
+     * Sends an email through Brevo API.
+     *
+     * @param to      recipient email address
+     * @param subject email subject
+     * @param body    email message
+     */
     public void sendEmail(
             String to,
             String subject,
             String body) {
 
-        System.out.println("========== BREVO DEBUG ==========");
-        System.out.println("Recipient : " + to);
-        System.out.println("Subject   : " + subject);
-        System.out.println(
-                "API Key Loaded : "
-                + (apiKey != null && !apiKey.isBlank()));
-
-        if (apiKey == null || apiKey.isBlank()) {
-            throw new RuntimeException(
-                    "BREVO_API_KEY is missing from environment variables");
-        }
-
         String json = """
-        {
-          "sender": {
-            "name": "Quiz Application",
-            "email": "project.work81950@gmail.com"
-          },
-          "to": [
-            {
-              "email": "%s"
-            }
-          ],
-          "subject": "%s",
-          "textContent": "%s"
-        }
-        """.formatted(
+                {
+                  "sender": {
+                    "name": "%s",
+                    "email": "%s"
+                  },
+                  "to": [
+                    {
+                      "email": "%s"
+                    }
+                  ],
+                  "subject": "%s",
+                  "textContent": "%s"
+                }
+                """.formatted(
+                escapeJson(SENDER_NAME),
+                escapeJson(SENDER_EMAIL),
                 escapeJson(to),
                 escapeJson(subject),
                 escapeJson(body)
@@ -59,9 +70,13 @@ public class EmailService {
 
         Request request =
                 new Request.Builder()
-                        .url("https://api.brevo.com/v3/smtp/email")
-                        .addHeader("accept", "application/json")
-                        .addHeader("api-key", apiKey)
+                        .url(BREVO_URL)
+                        .addHeader(
+                                "accept",
+                                "application/json")
+                        .addHeader(
+                                "api-key",
+                                apiKey)
                         .addHeader(
                                 "content-type",
                                 "application/json")
@@ -76,38 +91,29 @@ public class EmailService {
                             ? response.body().string()
                             : "";
 
-            System.out.println(
-                    "Brevo HTTP Status : "
-                    + response.code());
-
-            System.out.println(
-                    "Brevo Response : "
-                    + responseBody);
-
-            System.out.println(
-                    "================================");
-
             if (!response.isSuccessful()) {
 
                 throw new RuntimeException(
-                        "Brevo Error HTTP "
+                        "Unable to send email. " +
+                        "Brevo returned HTTP "
                         + response.code()
-                        + ": "
+                        + ". Response: "
                         + responseBody);
             }
 
         } catch (IOException e) {
 
-            System.out.println(
-                    "Brevo Connection Error: "
-                    + e.getMessage());
-
             throw new RuntimeException(
-                    "Unable to connect to Brevo",
+                    "Unable to send email. "
+                    + "Please try again later.",
                     e);
         }
     }
 
+    /**
+     * Safely escapes special characters
+     * before adding values to JSON.
+     */
     private String escapeJson(String value) {
 
         if (value == null) {
@@ -117,8 +123,8 @@ public class EmailService {
         return value
                 .replace("\\", "\\\\")
                 .replace("\"", "\\\"")
-                .replace("\n", "\\n")
                 .replace("\r", "\\r")
+                .replace("\n", "\\n")
                 .replace("\t", "\\t");
     }
 }
